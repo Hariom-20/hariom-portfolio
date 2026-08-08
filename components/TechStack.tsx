@@ -26,6 +26,7 @@ function TechPill({ tech, index }: { tech: Tech; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const [hover, setHover] = useState(false);
+  const [tapped, setTapped] = useState(false);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -46,6 +47,8 @@ function TechPill({ tech, index }: { tech: Tech; index: number }) {
 
   const color = groupColors[tech.group];
   const floatDur = 5 + (index % 5);
+  // active = pointer hover (desktop) OR tapped (touch/tap-to-reveal)
+  const active = hover || tapped;
 
   return (
     <motion.div
@@ -53,6 +56,7 @@ function TechPill({ tech, index }: { tech: Tech; index: number }) {
       onMouseMove={onMove}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={reset}
+      onClick={() => setTapped((v) => !v)}
       style={{ x: sx, y: sy }}
       className="relative"
     >
@@ -66,14 +70,14 @@ function TechPill({ tech, index }: { tech: Tech; index: number }) {
         }}
       >
         <div
-          className="sheen relative flex cursor-default items-center gap-2 rounded-full border px-5 py-2.5 backdrop-blur-md transition-all duration-300"
+          className="sheen relative flex cursor-pointer select-none items-center gap-2 rounded-full border px-5 py-2.5 backdrop-blur-md transition-all duration-300"
           style={{
-            borderColor: hover ? `${color}80` : "rgba(255,255,255,0.1)",
-            background: hover
+            borderColor: active ? `${color}80` : "rgba(255,255,255,0.1)",
+            background: active
               ? `linear-gradient(180deg, ${color}22, rgba(255,255,255,0.02))`
               : "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
-            boxShadow: hover ? `0 0 30px -6px ${color}99` : "none",
-            transform: hover ? "scale(1.06)" : "scale(1)",
+            boxShadow: active ? `0 0 30px -6px ${color}99` : "none",
+            transform: active ? "scale(1.06)" : "scale(1)",
           }}
         >
           <span
@@ -87,9 +91,9 @@ function TechPill({ tech, index }: { tech: Tech; index: number }) {
         <motion.div
           initial={false}
           animate={{
-            opacity: hover ? 1 : 0,
-            y: hover ? 0 : 6,
-            scale: hover ? 1 : 0.95,
+            opacity: active ? 1 : 0,
+            y: active ? 0 : 6,
+            scale: active ? 1 : 0.95,
           }}
           transition={{ duration: 0.2 }}
           className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-max max-w-[220px] -translate-x-1/2 rounded-lg border border-white/10 bg-black/80 px-3 py-1.5 text-center text-xs text-white/70 backdrop-blur-md"
