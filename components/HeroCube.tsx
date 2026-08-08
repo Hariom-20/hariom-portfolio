@@ -75,13 +75,14 @@ for (let x = -1; x <= 1; x++)
   for (let y = -1; y <= 1; y++)
     for (let z = -1; z <= 1; z++) CUBIES.push({ home: [x, y, z] });
 
+// Frosted, translucent tints in the cool brand palette — glassy, not colourful.
 const FACES = [
-  { t: `translateZ(${H}px)`, on: (_x: number, _y: number, z: number) => z === 1, color: "#e5484d" }, // front
-  { t: `rotateY(180deg) translateZ(${H}px)`, on: (_x: number, _y: number, z: number) => z === -1, color: "#f2820a" }, // back
-  { t: `rotateY(90deg) translateZ(${H}px)`, on: (x: number) => x === 1, color: "#3d63dd" }, // right
-  { t: `rotateY(-90deg) translateZ(${H}px)`, on: (x: number) => x === -1, color: "#30a46c" }, // left
-  { t: `rotateX(90deg) translateZ(${H}px)`, on: (_x: number, y: number) => y === -1, color: "#eceef0" }, // top
-  { t: `rotateX(-90deg) translateZ(${H}px)`, on: (_x: number, y: number) => y === 1, color: "#f5d90a" }, // bottom
+  { t: `translateZ(${H}px)`, on: (_x: number, _y: number, z: number) => z === 1, color: "rgba(124,140,255,0.26)" }, // front — indigo
+  { t: `rotateY(180deg) translateZ(${H}px)`, on: (_x: number, _y: number, z: number) => z === -1, color: "rgba(139,92,246,0.24)" }, // back — violet
+  { t: `rotateY(90deg) translateZ(${H}px)`, on: (x: number) => x === 1, color: "rgba(91,124,250,0.24)" }, // right — blue
+  { t: `rotateY(-90deg) translateZ(${H}px)`, on: (x: number) => x === -1, color: "rgba(165,180,252,0.22)" }, // left — light indigo
+  { t: `rotateX(90deg) translateZ(${H}px)`, on: (_x: number, y: number) => y === -1, color: "rgba(255,255,255,0.20)" }, // top — frosted white
+  { t: `rotateX(-90deg) translateZ(${H}px)`, on: (_x: number, y: number) => y === 1, color: "rgba(99,102,241,0.20)" }, // bottom — deep indigo
 ];
 
 const AXIS_IDX: Record<Axis, number> = { x: 12, y: 13, z: 14 };
@@ -122,11 +123,11 @@ const GAP = 90;
 function Sticker({ color }: { color: string }) {
   return (
     <span
-      className="absolute inset-[5px] rounded-[7px]"
+      className="absolute inset-[5px] rounded-[7px] border border-white/15"
       style={{
-        background: `linear-gradient(150deg, ${color}, ${color}cc)`,
+        background: `linear-gradient(150deg, ${color}, rgba(255,255,255,0.03))`,
         boxShadow:
-          "inset 0 1px 1px rgba(255,255,255,0.35), inset 0 -2px 6px rgba(0,0,0,0.35)",
+          "inset 0 1px 0 rgba(255,255,255,0.30), 0 0 12px -4px rgba(124,140,255,0.5)",
       }}
     />
   );
@@ -166,8 +167,9 @@ function CubieView({
                 left: -H,
                 top: -H,
                 transform: f.t,
-                background: "#0b0b0e",
-                border: "1px solid rgba(0,0,0,0.6)",
+                background:
+                  "linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015))",
+                border: "1px solid rgba(255,255,255,0.08)",
                 boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.04)",
               }}
             >
