@@ -28,6 +28,15 @@ const channels = [
     ),
   },
   {
+    label: "GitHub",
+    value: "Hariom-20",
+    href: profile.github,
+    external: true,
+    icon: (
+      <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" />
+    ),
+  },
+  {
     label: "Phone",
     value: profile.phone,
     href: `tel:${profile.phone.replace(/\s/g, "")}`,
@@ -96,7 +105,7 @@ export default function Contact() {
         </Reveal>
 
         {/* Channels */}
-        <div className="mx-auto mt-16 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="mx-auto mt-16 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {channels.map((c, i) => (
             <Reveal key={c.label} delay={0.1 + i * 0.08}>
               <a

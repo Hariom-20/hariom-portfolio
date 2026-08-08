@@ -9,6 +9,7 @@ export const profile = {
   email: "hs7290487@gmail.com",
   phone: "+91 9643980373",
   linkedin: "https://www.linkedin.com/in/hariom-sharma2005",
+  github: "https://github.com/Hariom-20",
   resumeUrl: "/Hariom_Sharma_Resume.pdf",
   positioning:
     "Full Stack MERN Developer building scalable, production-ready web applications with modern frontend experiences, robust backend systems and cloud deployment.",
@@ -82,6 +83,7 @@ export const experiences: Experience[] = [
   {
     role: "Web Developer Intern",
     company: "House of Creasip",
+    location: "Delhi · On-site",
     period: "Jun 2026 – Present",
     current: true,
     points: [
@@ -118,7 +120,7 @@ export const experiences: Experience[] = [
   {
     role: "Full-Spectrum IT Assistant",
     company: "Ambrosia Botanicals",
-    location: "Gurugram",
+    location: "Gurgaon · On-site",
     period: "Apr 2025 – Oct 2025",
     points: [
       "Designed and customized WordPress themes aligned with brand identity and SEO best practices",

@@ -21,7 +21,7 @@ const jsonLd = {
   email: `mailto:${profile.email}`,
   telephone: profile.phone,
   url: "https://hariomsharma.dev",
-  sameAs: [profile.linkedin],
+  sameAs: [profile.linkedin, profile.github],
   address: {
     "@type": "PostalAddress",
     addressLocality: "Faridabad",
