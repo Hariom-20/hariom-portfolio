@@ -94,7 +94,7 @@ export function EcommerceMockup({ accent }: { accent: string }) {
 
 export function JobPortalMockup({ accent }: { accent: string }) {
   return (
-    <Chrome url="jobiq.hariom.dev" accent={accent}>
+    <Chrome url="jobsindelhincr.in" accent={accent}>
       <div className="flex h-full flex-col p-4">
         {/* top bar */}
         <div className="flex items-center justify-between">

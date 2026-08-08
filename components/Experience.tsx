@@ -66,7 +66,8 @@ function ExperienceCard({
                 {exp.role}
               </h3>
               <p className="mt-1 text-sm text-white/55">
-                {exp.company} — {exp.location}
+                {exp.company}
+                {exp.location ? ` — ${exp.location}` : ""}
               </p>
 
               <ul

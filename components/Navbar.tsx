@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { navLinks } from "@/lib/data";
+import { navLinks, profile } from "@/lib/data";
 import PersonaToggle from "./ui/PersonaToggle";
 
 export default function Navbar() {
@@ -162,6 +162,18 @@ export default function Navbar() {
                   </li>
                 ))}
               </ul>
+
+              <a
+                href={profile.resumeUrl}
+                download
+                onClick={() => setOpen(false)}
+                className="mt-2 flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/[0.08]"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                </svg>
+                Download CV
+              </a>
             </motion.div>
           </motion.div>
         )}

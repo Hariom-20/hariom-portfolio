@@ -114,6 +114,23 @@ export default function Hero() {
             >
               Let&apos;s Connect
             </MagneticButton>
+
+            <a
+              href={profile.resumeUrl}
+              download
+              className="group inline-flex items-center gap-2 rounded-full px-4 py-3.5 text-sm font-semibold text-white/60 transition-colors hover:text-white"
+            >
+              <svg
+                className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+              </svg>
+              Download CV
+            </a>
           </motion.div>
 
           <motion.div

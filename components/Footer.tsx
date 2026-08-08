@@ -58,6 +58,16 @@ export default function Footer() {
                 <path d="M8 10v6M8 7v.01M12 16v-3a2 2 0 0 1 4 0v3M12 16v-6" />
               </svg>
             </a>
+            <a
+              href={profile.resumeUrl}
+              download
+              aria-label="Download résumé"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-white/60 transition-all hover:border-white/25 hover:text-white"
+            >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+              </svg>
+            </a>
           </div>
           <p className="mt-2 text-xs text-white/30">
             © {new Date().getFullYear()} Hariom Sharma
