@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AnimatePresence,
   motion,
   useMotionValue,
   useSpring,
@@ -22,11 +23,19 @@ const groupColors: Record<Tech["group"], string> = {
   CMS: "#6d7cff",
 };
 
-function TechPill({ tech, index }: { tech: Tech; index: number }) {
+function TechPill({
+  tech,
+  index,
+  active,
+  setActive,
+}: {
+  tech: Tech;
+  index: number;
+  active: boolean;
+  setActive: (name: string | null) => void;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
-  const [hover, setHover] = useState(false);
-  const [tapped, setTapped] = useState(false);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -39,24 +48,22 @@ function TechPill({ tech, index }: { tech: Tech; index: number }) {
     x.set((e.clientX - (r.left + r.width / 2)) * 0.4);
     y.set((e.clientY - (r.top + r.height / 2)) * 0.4);
   };
-  const reset = () => {
+  const clear = () => {
     x.set(0);
     y.set(0);
-    setHover(false);
+    setActive(null);
   };
 
   const color = groupColors[tech.group];
   const floatDur = 5 + (index % 5);
-  // active = pointer hover (desktop) OR tapped (touch/tap-to-reveal)
-  const active = hover || tapped;
 
   return (
     <motion.div
       ref={ref}
       onMouseMove={onMove}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={reset}
-      onClick={() => setTapped((v) => !v)}
+      onMouseEnter={() => setActive(tech.name)}
+      onMouseLeave={clear}
+      onClick={() => setActive(tech.name)}
       style={{ x: sx, y: sy }}
       className="relative"
     >
@@ -86,23 +93,6 @@ function TechPill({ tech, index }: { tech: Tech; index: number }) {
           />
           <span className="text-sm font-medium text-white/90">{tech.name}</span>
         </div>
-
-        {/* Tooltip */}
-        <motion.div
-          initial={false}
-          animate={{
-            opacity: active ? 1 : 0,
-            y: active ? 0 : 6,
-            scale: active ? 1 : 0.95,
-          }}
-          transition={{ duration: 0.2 }}
-          className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-max max-w-[220px] -translate-x-1/2 rounded-lg border border-white/10 bg-black/80 px-3 py-1.5 text-center text-xs text-white/70 backdrop-blur-md"
-        >
-          <span className="mb-0.5 block text-[10px] uppercase tracking-wider" style={{ color }}>
-            {tech.group}
-          </span>
-          {tech.blurb}
-        </motion.div>
       </motion.div>
     </motion.div>
   );
@@ -119,7 +109,7 @@ const groupOrder: Tech["group"][] = [
 
 function SimplifiedStack() {
   return (
-    <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
       {groupOrder.map((group, gi) => {
         const items = technologies.filter((t) => t.group === group);
         if (items.length === 0) return null;
@@ -154,6 +144,68 @@ function SimplifiedStack() {
   );
 }
 
+function Constellation() {
+  const [activeName, setActiveName] = useState<string | null>(null);
+  const activeTech = technologies.find((t) => t.name === activeName) ?? null;
+
+  return (
+    <>
+      <Reveal delay={0.15} className="mt-12 md:mt-16">
+        <div className="relative rounded-3xl border border-white/8 bg-white/[0.015] p-6 sm:p-8 md:p-14">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-indigo/10 blur-[100px]" />
+          <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5">
+            {technologies.map((tech, i) => (
+              <TechPill
+                key={tech.name}
+                tech={tech}
+                index={i}
+                active={activeName === tech.name}
+                setActive={setActiveName}
+              />
+            ))}
+          </div>
+        </div>
+      </Reveal>
+
+      {/* Single caption — updates on hover/tap, no overlapping tooltips */}
+      <div className="mt-5 flex min-h-[2.75rem] items-center justify-center px-4 text-center">
+        <AnimatePresence mode="wait">
+          {activeTech ? (
+            <motion.p
+              key={activeTech.name}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              className="text-sm text-white/65"
+            >
+              <span
+                className="font-semibold uppercase tracking-wider"
+                style={{ color: groupColors[activeTech.group] }}
+              >
+                {activeTech.group}
+              </span>
+              <span className="mx-2 text-white/25">·</span>
+              {activeTech.blurb}
+            </motion.p>
+          ) : (
+            <motion.p
+              key="hint"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="text-sm text-white/35"
+            >
+              Hover or tap a technology to see what it powers.
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
+  );
+}
+
 export default function TechStack() {
   const { persona } = usePersona();
   return (
@@ -168,20 +220,7 @@ export default function TechStack() {
           description={personaCopy.stackDesc[persona]}
         />
 
-        {persona === "hr" ? (
-          <SimplifiedStack />
-        ) : (
-          <Reveal delay={0.15} className="mt-16">
-            <div className="relative rounded-3xl border border-white/8 bg-white/[0.015] p-8 md:p-14">
-              <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-indigo/10 blur-[100px]" />
-              <div className="relative flex flex-wrap items-center justify-center gap-4 md:gap-5">
-                {technologies.map((tech, i) => (
-                  <TechPill key={tech.name} tech={tech} index={i} />
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        )}
+        {persona === "hr" ? <SimplifiedStack /> : <Constellation />}
 
         {/* Legend — technical view only */}
         {persona === "tech" && (

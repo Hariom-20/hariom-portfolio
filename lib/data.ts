@@ -259,7 +259,7 @@ export const personaCopy = {
     hr: "I've worked across a web developer internship, freelance projects and an IT support role — comfortable owning work independently, collaborating with a team and communicating clearly throughout.",
   },
   stackDesc: {
-    tech: "A constellation of the frontend, backend, database and cloud tools I use to ship production-ready applications. Hover to explore.",
+    tech: "A constellation of the frontend, backend, database and cloud tools I use to ship production-ready applications. Hover or tap to explore.",
     hr: "A snapshot of the core skills I bring across frontend, backend, database, cloud and content-management work.",
   },
   experienceDesc: {
