@@ -9,6 +9,7 @@ import {
 } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Particles from "./ui/Particles";
+import RubikCube from "./RubikCube";
 import { usePersona } from "./PersonaContext";
 
 const codeFragments = [
@@ -48,9 +49,6 @@ export default function HeroScene() {
     return () => window.removeEventListener("mousemove", handle);
   }, [mx, my, reduce]);
 
-  const faceBase =
-    "absolute inset-0 rounded-2xl border border-white/15 bg-gradient-to-br from-white/[0.14] to-white/[0.02] backdrop-blur-sm";
-
   return (
     <div
       ref={ref}
@@ -67,47 +65,13 @@ export default function HeroScene() {
         className="preserve-3d relative h-[280px] w-[280px] sm:h-[320px] sm:w-[320px]"
         style={{ rotateX: reduce ? 0 : rx, rotateY: reduce ? 0 : ry }}
       >
-        {/* Rotating glass cube */}
-        <motion.div
-          className="preserve-3d absolute left-1/2 top-1/2 h-40 w-40 sm:h-48 sm:w-48"
-          style={{ x: "-50%", y: "-50%" }}
-          animate={reduce ? {} : { rotateY: 360, rotateX: [0, 8, 0] }}
-          transition={{
-            rotateY: { duration: 26, repeat: Infinity, ease: "linear" },
-            rotateX: { duration: 12, repeat: Infinity, ease: "easeInOut" },
-          }}
+        {/* Interactive Rubik's-style cube */}
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{ transformStyle: "preserve-3d" }}
         >
-          {(() => {
-            const s = "6rem"; // half-size translate; matches ~12rem cube
-            const faces = [
-              `translateZ(${s})`,
-              `rotateY(180deg) translateZ(${s})`,
-              `rotateY(90deg) translateZ(${s})`,
-              `rotateY(-90deg) translateZ(${s})`,
-              `rotateX(90deg) translateZ(${s})`,
-              `rotateX(-90deg) translateZ(${s})`,
-            ];
-            return faces.map((t, i) => (
-              <div
-                key={i}
-                className={`${faceBase} shadow-glow`}
-                style={{ transform: t }}
-              >
-                <div className="sheen absolute inset-0 rounded-2xl" />
-                <div className="absolute inset-3 rounded-xl border border-white/5" />
-                <div className="absolute left-3 top-3 h-1.5 w-1.5 rounded-full bg-accent-glow/80" />
-              </div>
-            ));
-          })()}
-        </motion.div>
-
-        {/* Inner glowing core */}
-        <motion.div
-          className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-accent-glow to-accent-violet blur-[2px]"
-          style={{ transform: "translateZ(0px)" }}
-          animate={reduce ? {} : { scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
+          <RubikCube />
+        </div>
 
         {/* Floating code fragments — technical view only */}
         {persona === "tech" &&

@@ -1,8 +1,8 @@
 "use client";
 
 import Reveal from "./ui/Reveal";
-import Counter from "./ui/Counter";
 import SectionHeading from "./ui/SectionHeading";
+import StatsGrid from "./ui/StatsGrid";
 import { personaCopy, statsTech, statsHr } from "@/lib/data";
 import { usePersona } from "./PersonaContext";
 
@@ -33,25 +33,9 @@ export default function About() {
         </div>
 
         {/* Stats */}
-        <div className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/8 bg-white/[0.02] md:mt-24 md:grid-cols-4">
-          {stats.map((stat, i) => (
-            <Reveal
-              key={stat.label}
-              delay={i * 0.08}
-              className="group relative bg-ink-950/40 p-6 transition-colors hover:bg-white/[0.03] md:p-8"
-            >
-              <div className="text-4xl font-semibold tracking-tight text-gradient-accent md:text-5xl">
-                {stat.display ? (
-                  stat.display
-                ) : (
-                  <Counter value={stat.value} suffix={stat.suffix} />
-                )}
-              </div>
-              <div className="mt-2 text-sm text-white/45">{stat.label}</div>
-              <span className="absolute inset-x-6 bottom-0 h-px scale-x-0 bg-gradient-to-r from-accent-glow/60 to-transparent transition-transform duration-500 group-hover:scale-x-100" />
-            </Reveal>
-          ))}
-        </div>
+        <Reveal>
+          <StatsGrid key={persona} stats={stats} />
+        </Reveal>
       </div>
     </section>
   );
