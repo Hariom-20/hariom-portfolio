@@ -8,6 +8,7 @@ type Props = {
   className?: string;
   delay?: number;
   y?: number;
+  x?: number;
   as?: "div" | "section" | "span" | "li" | "article";
 };
 
@@ -16,15 +17,22 @@ export default function Reveal({
   className,
   delay = 0,
   y = 24,
+  x = 0,
   as = "div",
 }: Props) {
   const reduce = useReducedMotion();
 
   const variants: Variants = {
-    hidden: { opacity: 0, y: reduce ? 0 : y, filter: reduce ? "none" : "blur(6px)" },
+    hidden: {
+      opacity: 0,
+      y: reduce ? 0 : y,
+      x: reduce ? 0 : x,
+      filter: reduce ? "none" : "blur(6px)",
+    },
     show: {
       opacity: 1,
       y: 0,
+      x: 0,
       filter: "blur(0px)",
       transition: {
         duration: 0.7,

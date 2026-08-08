@@ -8,7 +8,7 @@ import SectionHeading from "./ui/SectionHeading";
 import { experiences, personaCopy } from "@/lib/data";
 import { usePersona } from "./PersonaContext";
 
-function ExperienceCard({
+function ExperienceItem({
   exp,
   index,
   persona,
@@ -17,16 +17,21 @@ function ExperienceCard({
   index: number;
   persona: "tech" | "hr";
 }) {
+  const isLeft = index % 2 === 0;
+  // md+ alignment helpers
+  const alignText = isLeft ? "md:text-right" : "md:text-left";
+  const alignRow = isLeft ? "md:justify-end" : "md:justify-start";
+
   return (
-    <div className="relative pl-10 md:pl-0">
-      {/* Node dot */}
-      <div className="absolute left-[9px] top-2 md:left-1/2 md:-translate-x-1/2">
+    <div className="relative pl-12 md:pl-0">
+      {/* Node dot on the central rail */}
+      <div className="absolute left-[15px] top-7 -translate-x-1/2 md:left-1/2">
         <span className="relative flex h-4 w-4 items-center justify-center">
           {exp.current && (
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-glow/50" />
           )}
           <span
-            className={`relative h-3 w-3 rounded-full border-2 ${
+            className={`relative h-3.5 w-3.5 rounded-full border-2 ${
               exp.current
                 ? "border-accent-glow bg-accent-glow shadow-glow"
                 : "border-white/40 bg-ink-900"
@@ -35,23 +40,24 @@ function ExperienceCard({
         </span>
       </div>
 
-      <div
-        className={`md:grid md:grid-cols-2 md:gap-12 ${
-          index % 2 === 0 ? "" : "md:[direction:rtl]"
+      {/* Branch connector from rail to card (desktop only) */}
+      <span
+        aria-hidden
+        className={`absolute top-[34px] hidden h-px w-8 md:block ${
+          isLeft
+            ? "right-1/2 mr-2 bg-gradient-to-l from-accent-glow/60 to-transparent"
+            : "left-1/2 ml-2 bg-gradient-to-r from-accent-glow/60 to-transparent"
         }`}
-      >
+      />
+
+      <div className="md:grid md:grid-cols-2 md:gap-x-16">
         <Reveal
-          className={`[direction:ltr] ${
-            index % 2 === 0 ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"
-          }`}
+          x={isLeft ? -40 : 40}
+          className={isLeft ? "md:col-start-1" : "md:col-start-2"}
         >
           <TiltCard max={6} className="group">
             <div className="sheen glass relative overflow-hidden rounded-2xl p-6 shadow-glass transition-colors md:p-7">
-              <div
-                className={`flex items-center gap-2 text-xs ${
-                  index % 2 === 0 ? "md:justify-end" : ""
-                }`}
-              >
+              <div className={`flex items-center gap-2 text-xs ${alignRow}`}>
                 <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 font-medium text-accent-glow/90">
                   {exp.period}
                 </span>
@@ -62,19 +68,15 @@ function ExperienceCard({
                 )}
               </div>
 
-              <h3 className="mt-4 text-xl font-semibold tracking-tight text-white md:text-2xl">
+              <h3 className={`mt-4 text-xl font-semibold tracking-tight text-white md:text-2xl ${alignText}`}>
                 {exp.role}
               </h3>
-              <p className="mt-1 text-sm text-white/55">
+              <p className={`mt-1 text-sm text-white/55 ${alignText}`}>
                 {exp.company}
                 {exp.location ? ` — ${exp.location}` : ""}
               </p>
 
-              <ul
-                className={`mt-5 space-y-2.5 text-sm leading-relaxed text-white/60 ${
-                  index % 2 === 0 ? "md:text-right" : ""
-                }`}
-              >
+              <ul className={`mt-5 space-y-2.5 text-sm leading-relaxed text-white/60 ${alignText}`}>
                 {exp.points.map((p) => (
                   <li key={p} className="text-white/60">
                     {p}
@@ -84,11 +86,7 @@ function ExperienceCard({
 
               {/* Live links — proof of work, shown in both views */}
               {exp.links && exp.links.length > 0 && (
-                <div
-                  className={`mt-5 flex flex-wrap gap-2 ${
-                    index % 2 === 0 ? "md:justify-end" : ""
-                  }`}
-                >
+                <div className={`mt-5 flex flex-wrap gap-2 ${alignRow}`}>
                   {exp.links.map((link) => (
                     <a
                       key={link.url}
@@ -118,11 +116,7 @@ function ExperienceCard({
 
               {/* Technical stack tags — technical view only */}
               {persona === "tech" && (
-                <div
-                  className={`mt-4 flex flex-wrap gap-2 ${
-                    index % 2 === 0 ? "md:justify-end" : ""
-                  }`}
-                >
+                <div className={`mt-4 flex flex-wrap gap-2 ${alignRow}`}>
                   {exp.tags.map((tag) => (
                     <span
                       key={tag}
@@ -147,7 +141,7 @@ export default function Experience() {
   const { persona } = usePersona();
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 60%", "end 70%"],
+    offset: ["start 55%", "end 75%"],
   });
   const height = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
@@ -161,17 +155,17 @@ export default function Experience() {
         />
 
         <div ref={ref} className="relative mt-16 md:mt-24">
-          {/* Timeline rail */}
-          <div className="absolute left-[15px] top-0 h-full w-px bg-white/8 md:left-1/2 md:-translate-x-1/2">
+          {/* Central rail */}
+          <div className="absolute left-[15px] top-0 h-full w-px -translate-x-1/2 bg-white/8 md:left-1/2">
             <motion.div
-              className="absolute left-0 top-0 w-px bg-gradient-to-b from-accent-glow via-accent-violet to-transparent"
+              className="absolute left-0 top-0 w-px bg-gradient-to-b from-accent-glow via-accent-violet to-accent-glow/0"
               style={{ height: reduce ? "100%" : height }}
             />
           </div>
 
-          <div className="space-y-14 md:space-y-24">
+          <div className="space-y-12 md:space-y-20">
             {experiences.map((exp, i) => (
-              <ExperienceCard
+              <ExperienceItem
                 key={exp.company + exp.period}
                 exp={exp}
                 index={i}

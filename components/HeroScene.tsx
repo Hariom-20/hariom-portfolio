@@ -9,7 +9,7 @@ import {
 } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Particles from "./ui/Particles";
-import RubikCube from "./RubikCube";
+import HeroCube from "./HeroCube";
 import { usePersona } from "./PersonaContext";
 
 const codeFragments = [
@@ -70,7 +70,7 @@ export default function HeroScene() {
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           style={{ transformStyle: "preserve-3d" }}
         >
-          <RubikCube />
+          <HeroCube />
         </div>
 
         {/* Floating code fragments — technical view only */}
