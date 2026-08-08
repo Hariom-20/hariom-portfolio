@@ -75,15 +75,22 @@ for (let x = -1; x <= 1; x++)
   for (let y = -1; y <= 1; y++)
     for (let z = -1; z <= 1; z++) CUBIES.push({ home: [x, y, z] });
 
-// Frosted, translucent tints in the cool brand palette — glassy, not colourful.
+// Frosted translucent glass in the cool brand palette + per-face directional
+// lighting (top bright → bottom shadowed) for real, glossy dimensionality.
 const FACES = [
-  { t: `translateZ(${H}px)`, on: (_x: number, _y: number, z: number) => z === 1, color: "rgba(124,140,255,0.26)" }, // front — indigo
-  { t: `rotateY(180deg) translateZ(${H}px)`, on: (_x: number, _y: number, z: number) => z === -1, color: "rgba(139,92,246,0.24)" }, // back — violet
-  { t: `rotateY(90deg) translateZ(${H}px)`, on: (x: number) => x === 1, color: "rgba(91,124,250,0.24)" }, // right — blue
-  { t: `rotateY(-90deg) translateZ(${H}px)`, on: (x: number) => x === -1, color: "rgba(165,180,252,0.22)" }, // left — light indigo
-  { t: `rotateX(90deg) translateZ(${H}px)`, on: (_x: number, y: number) => y === -1, color: "rgba(255,255,255,0.20)" }, // top — frosted white
-  { t: `rotateX(-90deg) translateZ(${H}px)`, on: (_x: number, y: number) => y === 1, color: "rgba(99,102,241,0.20)" }, // bottom — deep indigo
+  { t: `translateZ(${H}px)`, on: (_x: number, _y: number, z: number) => z === 1, color: "rgba(124,140,255,0.24)", light: 0.85 }, // front
+  { t: `rotateY(180deg) translateZ(${H}px)`, on: (_x: number, _y: number, z: number) => z === -1, color: "rgba(139,92,246,0.22)", light: 0.45 }, // back
+  { t: `rotateY(90deg) translateZ(${H}px)`, on: (x: number) => x === 1, color: "rgba(91,124,250,0.22)", light: 0.7 }, // right
+  { t: `rotateY(-90deg) translateZ(${H}px)`, on: (x: number) => x === -1, color: "rgba(165,180,252,0.2)", light: 0.55 }, // left
+  { t: `rotateX(90deg) translateZ(${H}px)`, on: (_x: number, y: number) => y === -1, color: "rgba(226,232,255,0.22)", light: 1.0 }, // top
+  { t: `rotateX(-90deg) translateZ(${H}px)`, on: (_x: number, y: number) => y === 1, color: "rgba(99,102,241,0.18)", light: 0.28 }, // bottom
 ];
+
+// Directional-light overlay for a face: lightens the lit faces, shadows the rest.
+const lightOverlay = (l: number) =>
+  l >= 0.6
+    ? `rgba(255,255,255,${((l - 0.6) * 0.32).toFixed(3)})`
+    : `rgba(4,4,10,${((0.6 - l) * 0.62).toFixed(3)})`;
 
 const AXIS_IDX: Record<Axis, number> = { x: 12, y: 13, z: 14 };
 
@@ -123,13 +130,22 @@ const GAP = 90;
 function Sticker({ color }: { color: string }) {
   return (
     <span
-      className="absolute inset-[5px] rounded-[7px] border border-white/15"
+      className="absolute inset-[4px] overflow-hidden rounded-[8px] border border-white/20"
       style={{
-        background: `linear-gradient(150deg, ${color}, rgba(255,255,255,0.03))`,
+        background: `linear-gradient(155deg, ${color}, rgba(255,255,255,0.04) 55%, rgba(0,0,0,0.12))`,
         boxShadow:
-          "inset 0 1px 0 rgba(255,255,255,0.30), 0 0 12px -4px rgba(124,140,255,0.5)",
+          "inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -6px 10px -6px rgba(0,0,0,0.4), 0 0 14px -5px rgba(124,140,255,0.6)",
       }}
-    />
+    >
+      {/* glossy specular streak */}
+      <span
+        className="pointer-events-none absolute -inset-1"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.08) 22%, transparent 45%)",
+        }}
+      />
+    </span>
   );
 }
 
@@ -160,7 +176,7 @@ function CubieView({
           return (
             <div
               key={i}
-              className="absolute rounded-[9px]"
+              className="absolute overflow-hidden rounded-[10px]"
               style={{
                 width: S,
                 height: S,
@@ -168,12 +184,19 @@ function CubieView({
                 top: -H,
                 transform: f.t,
                 background:
-                  "linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015))",
+                  "linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015))",
                 border: "1px solid rgba(255,255,255,0.08)",
+                borderTopColor: "rgba(255,255,255,0.22)",
+                borderLeftColor: "rgba(255,255,255,0.14)",
                 boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.04)",
               }}
             >
               {lit && <Sticker color={f.color} />}
+              {/* directional lighting */}
+              <span
+                className="pointer-events-none absolute inset-0"
+                style={{ background: lightOverlay(f.light) }}
+              />
             </div>
           );
         })}
@@ -282,7 +305,7 @@ export default function HeroCube() {
       <motion.div
         className="absolute left-1/2 top-1/2"
         style={{ transformStyle: "preserve-3d", rotateX: -26 }}
-        animate={reduce ? { rotateY: -34 } : { rotateY: [0, 360] }}
+        animate={reduce ? { rotateY: -34 } : { rotateY: [0, 360], y: [0, -10, 0] }}
         transition={
           reduce
             ? {}
@@ -292,6 +315,7 @@ export default function HeroCube() {
                   repeat: Infinity,
                   ease: "linear",
                 },
+                y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
               }
         }
       >
