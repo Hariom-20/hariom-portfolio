@@ -153,7 +153,7 @@ function SimplifiedStack() {
 export default function TechStack() {
   const { persona } = usePersona();
   return (
-    <section id="stack" className="relative overflow-hidden py-28 md:py-36">
+    <section id="stack" className="relative overflow-hidden py-16 md:py-36">
       {persona === "tech" && (
         <Particles className="opacity-40" density={4} linked={false} />
       )}

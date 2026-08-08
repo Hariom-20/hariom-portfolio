@@ -145,12 +145,12 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Right: 3D scene */}
+        {/* Right: 3D scene — decorative, hidden on small screens for a clean mobile hero */}
         <motion.div
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="relative"
+          className="relative hidden lg:block"
         >
           <HeroScene />
         </motion.div>

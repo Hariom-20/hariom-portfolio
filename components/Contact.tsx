@@ -48,7 +48,7 @@ const channels = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative overflow-hidden py-28 md:py-40">
+    <section id="contact" className="relative overflow-hidden py-20 md:py-40">
       <Particles className="opacity-50" density={5} />
       <div className="pointer-events-none absolute left-1/2 top-1/3 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-accent-indigo/12 blur-[120px]" />
 

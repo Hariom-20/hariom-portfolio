@@ -146,7 +146,7 @@ export default function Experience() {
   const height = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    <section id="experience" className="relative py-28 md:py-36">
+    <section id="experience" className="relative py-16 md:py-36">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <SectionHeading
           eyebrow="Experience"

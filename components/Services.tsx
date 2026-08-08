@@ -10,7 +10,7 @@ export default function Services() {
   const [active, setActive] = useState<string | null>(null);
 
   return (
-    <section className="relative py-28 md:py-36">
+    <section className="relative py-16 md:py-36">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <SectionHeading
           eyebrow="What I Build"
