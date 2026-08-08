@@ -6,7 +6,8 @@ import TiltCard from "./ui/TiltCard";
 import SectionHeading from "./ui/SectionHeading";
 import MagneticButton from "./ui/MagneticButton";
 import { EcommerceMockup, JobPortalMockup } from "./BrowserMockup";
-import { projects, type Project } from "@/lib/data";
+import { projects, personaCopy, type Project } from "@/lib/data";
+import { usePersona } from "./PersonaContext";
 
 function LinkButton({
   href,
@@ -69,7 +70,15 @@ function CaseStudyRow({ label, text }: { label: string; text: string }) {
   );
 }
 
-function ProjectRow({ project, index }: { project: Project; index: number }) {
+function ProjectRow({
+  project,
+  index,
+  persona,
+}: {
+  project: Project;
+  index: number;
+  persona: "tech" | "hr";
+}) {
   const reversed = index % 2 === 1;
   const Mockup = index === 0 ? EcommerceMockup : JobPortalMockup;
 
@@ -118,17 +127,19 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
           {project.description}
         </p>
 
-        {/* Tech badges */}
-        <div className="mt-5 flex flex-wrap gap-2">
-          {project.stack.map((s) => (
-            <span
-              key={s}
-              className="rounded-md border border-white/8 bg-white/[0.03] px-2.5 py-1 text-xs text-white/60"
-            >
-              {s}
-            </span>
-          ))}
-        </div>
+        {/* Tech badges — technical view only */}
+        {persona === "tech" && (
+          <div className="mt-5 flex flex-wrap gap-2">
+            {project.stack.map((s) => (
+              <span
+                key={s}
+                className="rounded-md border border-white/8 bg-white/[0.03] px-2.5 py-1 text-xs text-white/60"
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Features */}
         <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1.5">
@@ -150,7 +161,9 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
         <div className="mt-6">
           <CaseStudyRow label="Problem" text={project.problem} />
           <CaseStudyRow label="Solution" text={project.solution} />
-          <CaseStudyRow label="Technology" text={project.technology} />
+          {persona === "tech" && (
+            <CaseStudyRow label="Technology" text={project.technology} />
+          )}
           <CaseStudyRow label="Result" text={project.result} />
         </div>
 
@@ -184,18 +197,24 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
 }
 
 export default function Projects() {
+  const { persona } = usePersona();
   return (
     <section id="projects" className="relative py-28 md:py-36">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <SectionHeading
           eyebrow="Selected Work"
           title="Projects, up close."
-          description="A closer look at what I've been building — from full-featured commerce to a modern job platform."
+          description={personaCopy.projectsDesc[persona]}
         />
 
         <div className="mt-20 space-y-28 md:mt-28 md:space-y-40">
           {projects.map((project, i) => (
-            <ProjectRow key={project.title} project={project} index={i} />
+            <ProjectRow
+              key={project.title}
+              project={project}
+              index={i}
+              persona={persona}
+            />
           ))}
         </div>
       </div>

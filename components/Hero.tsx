@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import HeroScene from "./HeroScene";
 import MagneticButton from "./ui/MagneticButton";
-import { profile } from "@/lib/data";
+import { profile, personaCopy } from "@/lib/data";
+import { usePersona } from "./PersonaContext";
 
 const line1 = "BUILDING DIGITAL";
 const line2 = "EXPERIENCES THAT WORK.";
@@ -44,6 +45,7 @@ function AnimatedHeadline() {
 }
 
 export default function Hero() {
+  const { persona } = usePersona();
   return (
     <section
       id="home"
@@ -69,15 +71,20 @@ export default function Hero() {
 
           <AnimatedHeadline />
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="mt-7 max-w-xl text-base leading-relaxed text-white/55 md:text-lg"
-          >
-            Full Stack Web Developer specializing in MERN, modern frontend
-            architecture, scalable APIs and production-ready applications.
-          </motion.p>
+          <div className="mt-7 max-w-xl">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={persona}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.5, delay: 0.05 }}
+                className="text-base leading-relaxed text-white/55 md:text-lg"
+              >
+                {personaCopy.heroSubtitle[persona]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -115,7 +122,7 @@ export default function Hero() {
             transition={{ duration: 1, delay: 1.3 }}
             className="mt-10 flex items-center gap-6 text-xs uppercase tracking-[0.2em] text-white/35"
           >
-            <span>MERN Stack</span>
+            <span>{personaCopy.heroTag[persona]}</span>
             <span className="h-px w-6 bg-white/20" />
             <span>{profile.location.split(",")[0]}, India</span>
           </motion.div>

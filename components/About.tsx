@@ -3,9 +3,12 @@
 import Reveal from "./ui/Reveal";
 import Counter from "./ui/Counter";
 import SectionHeading from "./ui/SectionHeading";
-import { profile, stats } from "@/lib/data";
+import { personaCopy, statsTech, statsHr } from "@/lib/data";
+import { usePersona } from "./PersonaContext";
 
 export default function About() {
+  const { persona } = usePersona();
+  const stats = persona === "hr" ? statsHr : statsTech;
   return (
     <section id="about" className="relative py-28 md:py-36">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
@@ -17,15 +20,13 @@ export default function About() {
           <div className="lg:pt-4">
             <Reveal>
               <p className="text-xl font-light leading-relaxed text-white/80 md:text-2xl md:leading-relaxed">
-                {profile.aboutIntro}
+                {personaCopy.aboutIntro[persona]}
               </p>
             </Reveal>
 
             <Reveal delay={0.1}>
               <p className="mt-6 max-w-xl leading-relaxed text-white/50">
-                I care about clean code, performance and solving real-world
-                problems — from designing resilient APIs to shipping polished,
-                responsive interfaces and managing deployments end to end.
+                {personaCopy.aboutSecondary[persona]}
               </p>
             </Reveal>
           </div>

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { PersonaProvider } from "@/components/PersonaContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -68,7 +69,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <div className="ambient-bg" aria-hidden />
         <div className="grain" aria-hidden />
-        {children}
+        <PersonaProvider>{children}</PersonaProvider>
       </body>
     </html>
   );

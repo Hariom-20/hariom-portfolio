@@ -5,14 +5,17 @@ import { useRef } from "react";
 import Reveal from "./ui/Reveal";
 import TiltCard from "./ui/TiltCard";
 import SectionHeading from "./ui/SectionHeading";
-import { experiences } from "@/lib/data";
+import { experiences, personaCopy } from "@/lib/data";
+import { usePersona } from "./PersonaContext";
 
 function ExperienceCard({
   exp,
   index,
+  persona,
 }: {
   exp: (typeof experiences)[number];
   index: number;
+  persona: "tech" | "hr";
 }) {
   return (
     <div className="relative pl-10 md:pl-0">
@@ -78,20 +81,57 @@ function ExperienceCard({
                 ))}
               </ul>
 
-              <div
-                className={`mt-5 flex flex-wrap gap-2 ${
-                  index % 2 === 0 ? "md:justify-end" : ""
-                }`}
-              >
-                {exp.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-md border border-white/8 bg-white/[0.03] px-2.5 py-1 text-[11px] text-white/55 transition-colors group-hover:border-white/15"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              {/* Live links — proof of work, shown in both views */}
+              {exp.links && exp.links.length > 0 && (
+                <div
+                  className={`mt-5 flex flex-wrap gap-2 ${
+                    index % 2 === 0 ? "md:justify-end" : ""
+                  }`}
+                >
+                  {exp.links.map((link) => (
+                    <a
+                      key={link.url}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group/link inline-flex items-center gap-1.5 rounded-md border border-accent-glow/25 bg-accent-glow/[0.06] px-2.5 py-1 text-[11px] text-accent-glow/90 transition-colors hover:border-accent-glow/50 hover:text-white"
+                    >
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-glow/60" />
+                        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent-glow" />
+                      </span>
+                      {link.label}
+                      <svg
+                        className="h-3 w-3 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M7 17 17 7M8 7h9v9" />
+                      </svg>
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {/* Technical stack tags — technical view only */}
+              {persona === "tech" && (
+                <div
+                  className={`mt-4 flex flex-wrap gap-2 ${
+                    index % 2 === 0 ? "md:justify-end" : ""
+                  }`}
+                >
+                  {exp.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-md border border-white/8 bg-white/[0.03] px-2.5 py-1 text-[11px] text-white/55 transition-colors group-hover:border-white/15"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </TiltCard>
         </Reveal>
@@ -103,6 +143,7 @@ function ExperienceCard({
 export default function Experience() {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const { persona } = usePersona();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start 60%", "end 70%"],
@@ -115,7 +156,7 @@ export default function Experience() {
         <SectionHeading
           eyebrow="Experience"
           title="Where I've worked."
-          description="A track record of building full-stack applications, customizing platforms and shipping to the cloud."
+          description={personaCopy.experienceDesc[persona]}
         />
 
         <div ref={ref} className="relative mt-16 md:mt-24">
@@ -129,7 +170,12 @@ export default function Experience() {
 
           <div className="space-y-14 md:space-y-24">
             {experiences.map((exp, i) => (
-              <ExperienceCard key={exp.company + exp.period} exp={exp} index={i} />
+              <ExperienceCard
+                key={exp.company + exp.period}
+                exp={exp}
+                index={i}
+                persona={persona}
+              />
             ))}
           </div>
         </div>

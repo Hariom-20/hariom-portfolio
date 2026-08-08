@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { navLinks } from "@/lib/data";
+import PersonaToggle from "./ui/PersonaToggle";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -82,8 +83,10 @@ export default function Navbar() {
             ))}
           </ul>
 
-          <div className="flex items-center gap-3">
-            <span className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-white/70 sm:flex">
+          <div className="flex items-center gap-2.5">
+            <PersonaToggle />
+
+            <span className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-white/70 lg:flex">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
@@ -139,6 +142,13 @@ export default function Navbar() {
               transition={{ duration: 0.3 }}
               className="glass-strong absolute inset-x-4 top-24 rounded-2xl p-4 shadow-glass"
             >
+              <div className="mb-3 flex items-center justify-between rounded-xl border border-white/8 bg-white/[0.02] px-3 py-2.5">
+                <div>
+                  <p className="text-sm font-medium text-white/85">View mode</p>
+                  <p className="text-xs text-white/45">Tailor the portfolio</p>
+                </div>
+                <PersonaToggle size="lg" layoutId="persona-pill-mobile" />
+              </div>
               <ul className="flex flex-col">
                 {navLinks.map((link) => (
                   <li key={link.href}>

@@ -15,10 +15,24 @@ export const profile = {
     "Full Stack MERN Developer with experience building and deploying scalable web applications using MongoDB, Express.js, React.js and Node.js. Experienced in RESTful API development, JWT authentication and cloud deployment across AWS, Vercel and Render.",
 };
 
-export const stats = [
+export type Stat = {
+  value: number;
+  suffix: string;
+  label: string;
+  display?: string;
+};
+
+export const statsTech: Stat[] = [
   { value: 2, suffix: "+", label: "Years Experience" },
   { value: 4, suffix: "", label: "MERN Technologies", display: "MERN" },
   { value: 2, suffix: "", label: "Production Projects" },
+  { value: 4, suffix: "", label: "Cloud Platforms" },
+];
+
+export const statsHr: Stat[] = [
+  { value: 2, suffix: "+", label: "Years Experience" },
+  { value: 3, suffix: "", label: "Roles Held" },
+  { value: 4, suffix: "", label: "Live Projects" },
   { value: 4, suffix: "", label: "Cloud Platforms" },
 ];
 
@@ -49,6 +63,8 @@ export const technologies: Tech[] = [
   { name: "WordPress", group: "CMS", blurb: "Custom theme development" },
 ];
 
+export type ExperienceLink = { label: string; url: string };
+
 export type Experience = {
   role: string;
   company: string;
@@ -57,22 +73,33 @@ export type Experience = {
   current?: boolean;
   points: string[];
   tags: string[];
+  links?: ExperienceLink[];
 };
 
 export const experiences: Experience[] = [
   {
-    role: "Freelance MERN Stack Developer",
+    role: "Freelance Web Developer",
     company: "Self-Employed",
     location: "Remote",
     period: "Nov 2025 – Present",
     current: true,
     points: [
-      "Building a production-grade E-Commerce platform using React.js, Node.js, Express.js and MongoDB",
-      "Implementing JWT authentication, role-based access control and secure payment gateway integration",
-      "Designing RESTful APIs for product management, cart, order tracking and admin dashboard",
-      "Deploying applications using Vercel and Render",
+      "Designing and developing high-converting WordPress landing pages for marketing agencies",
+      "Built campaign landing pages for Creasip and HypeRatings — influencer marketing agencies — with responsive, SEO-friendly layouts and lead-capture forms",
+      "Optimizing pages for performance, mobile responsiveness and search visibility",
+      "Continuing full-stack MERN development — building web applications with React.js, Node.js, Express.js and MongoDB",
     ],
-    tags: ["React.js", "Node.js", "Express.js", "MongoDB", "JWT", "Vercel", "Render"],
+    tags: ["WordPress", "Landing Pages", "SEO", "React.js", "Node.js", "MongoDB"],
+    links: [
+      {
+        label: "HypeRatings — Nano Influencer LP",
+        url: "https://hyperatings.com/nano-influencer-marketing-agency/",
+      },
+      {
+        label: "Creasip — Macro Influencer LP",
+        url: "https://creasip.com/lp/macro-influencer-marketing-agency/",
+      },
+    ],
   },
   {
     role: "Full-Spectrum IT Assistant",
@@ -201,6 +228,39 @@ export const education = {
   school: "Faridabad College of Engineering and Management",
   period: "Aug 2023 – Present",
 };
+
+export type Persona = "tech" | "hr";
+
+export const personaCopy = {
+  heroSubtitle: {
+    tech: "Full Stack Web Developer specializing in MERN, modern frontend architecture, scalable APIs and production-ready applications.",
+    hr: "Full Stack Web Developer with 2+ years building and shipping real web products — from client landing pages to full applications and cloud deployment.",
+  },
+  heroTag: {
+    tech: "MERN Stack",
+    hr: "Web Developer",
+  },
+  aboutIntro: {
+    tech: "Full Stack MERN Developer with experience building and deploying scalable web applications using MongoDB, Express.js, React.js and Node.js. Experienced in RESTful API development, JWT authentication and cloud deployment across AWS, Vercel and Render.",
+    hr: "Full Stack Web Developer with 2+ years of hands-on experience delivering web applications and marketing websites for clients and teams. I take projects from idea to launch — the interface, the backend and the deployment — with a focus on reliability, clean work and real results.",
+  },
+  aboutSecondary: {
+    tech: "I care about clean code, performance and solving real-world problems — from designing resilient APIs to shipping polished, responsive interfaces and managing deployments end to end.",
+    hr: "I've worked across freelance projects, an IT support role and a full-stack developer position — comfortable owning work independently, collaborating with a team and communicating clearly throughout.",
+  },
+  stackDesc: {
+    tech: "A constellation of the frontend, backend, database and cloud tools I use to ship production-ready applications. Hover to explore.",
+    hr: "A snapshot of the core skills I bring across frontend, backend, database, cloud and content-management work.",
+  },
+  experienceDesc: {
+    tech: "A track record of building full-stack applications, customizing platforms and shipping to the cloud.",
+    hr: "A track record across freelance, IT support and full-stack development roles — delivering real projects end to end.",
+  },
+  projectsDesc: {
+    tech: "A closer look at what I've been building — from full-stack commerce to a modern job platform.",
+    hr: "Selected projects that show how I take ideas from concept to a working, live product.",
+  },
+} as const;
 
 export const navLinks = [
   { label: "Home", href: "#home" },

@@ -9,6 +9,7 @@ import {
 } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Particles from "./ui/Particles";
+import { usePersona } from "./PersonaContext";
 
 const codeFragments = [
   { text: "const app = express()", x: "-58%", y: "-30%", z: 90, delay: 0 },
@@ -21,6 +22,7 @@ const codeFragments = [
 
 export default function HeroScene() {
   const reduce = useReducedMotion();
+  const { persona } = usePersona();
   const ref = useRef<HTMLDivElement>(null);
 
   const mx = useMotionValue(0);
@@ -107,8 +109,9 @@ export default function HeroScene() {
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Floating code fragments */}
-        {codeFragments.map((frag, i) => (
+        {/* Floating code fragments — technical view only */}
+        {persona === "tech" &&
+          codeFragments.map((frag, i) => (
           <motion.div
             key={frag.text}
             className="absolute left-1/2 top-1/2 whitespace-nowrap rounded-lg border border-white/10 bg-black/40 px-2.5 py-1.5 font-mono text-[10px] text-accent-glow/90 shadow-lg backdrop-blur-md sm:text-xs"

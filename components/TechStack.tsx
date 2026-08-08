@@ -10,7 +10,8 @@ import { useRef, useState } from "react";
 import Reveal from "./ui/Reveal";
 import SectionHeading from "./ui/SectionHeading";
 import Particles from "./ui/Particles";
-import { technologies, type Tech } from "@/lib/data";
+import { technologies, personaCopy, type Tech } from "@/lib/data";
+import { usePersona } from "./PersonaContext";
 
 const groupColors: Record<Tech["group"], string> = {
   Frontend: "#6366f1",
@@ -103,42 +104,97 @@ function TechPill({ tech, index }: { tech: Tech; index: number }) {
   );
 }
 
+const groupOrder: Tech["group"][] = [
+  "Frontend",
+  "Backend",
+  "Database",
+  "Cloud",
+  "Tools",
+  "CMS",
+];
+
+function SimplifiedStack() {
+  return (
+    <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {groupOrder.map((group, gi) => {
+        const items = technologies.filter((t) => t.group === group);
+        if (items.length === 0) return null;
+        const color = groupColors[group];
+        return (
+          <Reveal key={group} delay={gi * 0.06}>
+            <div className="glass sheen relative h-full overflow-hidden rounded-2xl p-6">
+              <div className="flex items-center gap-2.5">
+                <span
+                  className="h-2.5 w-2.5 rounded-full"
+                  style={{ background: color, boxShadow: `0 0 10px ${color}` }}
+                />
+                <h3 className="text-sm font-medium uppercase tracking-[0.18em] text-white/80">
+                  {group}
+                </h3>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {items.map((t) => (
+                  <span
+                    key={t.name}
+                    className="rounded-lg border border-white/8 bg-white/[0.03] px-3 py-1.5 text-sm text-white/75"
+                  >
+                    {t.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function TechStack() {
+  const { persona } = usePersona();
   return (
     <section id="stack" className="relative overflow-hidden py-28 md:py-36">
-      <Particles className="opacity-40" density={4} linked={false} />
+      {persona === "tech" && (
+        <Particles className="opacity-40" density={4} linked={false} />
+      )}
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <SectionHeading
           eyebrow="Technology"
-          title="The stack I build with."
-          description="A constellation of the frontend, backend, database and cloud tools I use to ship production-ready applications. Hover to explore."
+          title={persona === "hr" ? "Core skills." : "The stack I build with."}
+          description={personaCopy.stackDesc[persona]}
         />
 
-        <Reveal delay={0.15} className="mt-16">
-          <div className="relative rounded-3xl border border-white/8 bg-white/[0.015] p-8 md:p-14">
-            <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-indigo/10 blur-[100px]" />
-            <div className="relative flex flex-wrap items-center justify-center gap-4 md:gap-5">
-              {technologies.map((tech, i) => (
-                <TechPill key={tech.name} tech={tech} index={i} />
+        {persona === "hr" ? (
+          <SimplifiedStack />
+        ) : (
+          <Reveal delay={0.15} className="mt-16">
+            <div className="relative rounded-3xl border border-white/8 bg-white/[0.015] p-8 md:p-14">
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-indigo/10 blur-[100px]" />
+              <div className="relative flex flex-wrap items-center justify-center gap-4 md:gap-5">
+                {technologies.map((tech, i) => (
+                  <TechPill key={tech.name} tech={tech} index={i} />
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        )}
+
+        {/* Legend — technical view only */}
+        {persona === "tech" && (
+          <Reveal delay={0.2} className="mt-8">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-white/40">
+              {(Object.keys(groupColors) as Tech["group"][]).map((g) => (
+                <span key={g} className="flex items-center gap-1.5">
+                  <span
+                    className="h-2 w-2 rounded-full"
+                    style={{ background: groupColors[g] }}
+                  />
+                  {g}
+                </span>
               ))}
             </div>
-          </div>
-        </Reveal>
-
-        {/* Legend */}
-        <Reveal delay={0.2} className="mt-8">
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-white/40">
-            {(Object.keys(groupColors) as Tech["group"][]).map((g) => (
-              <span key={g} className="flex items-center gap-1.5">
-                <span
-                  className="h-2 w-2 rounded-full"
-                  style={{ background: groupColors[g] }}
-                />
-                {g}
-              </span>
-            ))}
-          </div>
-        </Reveal>
+          </Reveal>
+        )}
       </div>
     </section>
   );
