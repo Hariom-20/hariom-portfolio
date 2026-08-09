@@ -141,13 +141,49 @@ export function DashboardPanel() {
         </svg>
       </div>
 
-      {/* mini legend rows */}
+      {/* mini tech tiles — icons matching the stack */}
       <div className="mt-3 grid grid-cols-3 gap-2">
-        {["#6366f1", "#8b5cf6", "#5b7cfa"].map((c, i) => (
-          <div key={i} className="rounded-lg border border-white/8 bg-white/[0.03] p-2">
-            <span className="block h-1.5 w-1.5 rounded-full" style={{ background: c }} />
-            <span className="mt-2 block h-1.5 w-full rounded-full bg-white/12" />
-            <span className="mt-1 block h-1.5 w-2/3 rounded-full bg-white/8" />
+        {[
+          {
+            c: "#6366f1",
+            // code brackets
+            icon: <path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 6l-3 12" />,
+          },
+          {
+            c: "#8b5cf6",
+            // database
+            icon: (
+              <>
+                <ellipse cx="12" cy="6" rx="7" ry="3" />
+                <path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6" />
+                <path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" />
+              </>
+            ),
+          },
+          {
+            c: "#5b7cfa",
+            // cloud
+            icon: <path d="M7 18a4 4 0 0 1-.5-7.97 5.5 5.5 0 0 1 10.6-1.02A4 4 0 0 1 17 18H7Z" />,
+          },
+        ].map((tile, i) => (
+          <div
+            key={i}
+            className="flex flex-col gap-2 rounded-lg border border-white/8 bg-white/[0.03] p-2"
+          >
+            <span style={{ color: tile.c }}>
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {tile.icon}
+              </svg>
+            </span>
+            <span className="block h-1.5 w-2/3 rounded-full bg-white/12" />
           </div>
         ))}
       </div>
