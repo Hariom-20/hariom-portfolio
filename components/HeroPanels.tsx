@@ -80,7 +80,7 @@ function MacDots() {
 
 /* ---------- individual panels ---------- */
 
-function DashboardPanel() {
+export function DashboardPanel() {
   return (
     <div className={`${glass} w-[290px] p-4 sm:w-[320px]`}>
       <div className="flex items-center justify-between">
@@ -199,7 +199,7 @@ function CodePanel() {
   );
 }
 
-function StatusPanel() {
+export function StatusPanel() {
   return (
     <div className={`${glass} flex w-[196px] items-center gap-3 p-3`}>
       <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-emerald-400/15">
@@ -238,6 +238,43 @@ function BadgePanel() {
           &lt;/&gt;
         </span>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Simplified, mobile-friendly hero visual — the Activity dashboard card with
+ * the Deploy chip, laid out in normal flow (no wide floating spread) so it
+ * fits phone widths without overflow or empty gaps.
+ */
+export function HeroMobileVisual() {
+  const reduce = useReducedMotion();
+  return (
+    <div className="relative mx-auto mt-10 w-full max-w-[330px]">
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-indigo/20 blur-[80px]" />
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.9, delay: 0.5, ease: EASE }}
+        className="relative"
+      >
+        {/* deploy chip, right-aligned above the card */}
+        <motion.div
+          animate={reduce ? {} : { y: [0, -5, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          className="relative z-20 -mb-3 ml-auto w-fit"
+        >
+          <StatusPanel />
+        </motion.div>
+        {/* activity dashboard card */}
+        <motion.div
+          animate={reduce ? {} : { y: [0, -8, 0] }}
+          transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+          className="relative z-10"
+        >
+          <DashboardPanel />
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

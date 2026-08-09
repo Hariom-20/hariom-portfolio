@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import HeroScene from "./HeroScene";
+import { HeroMobileVisual } from "./HeroPanels";
 import MagneticButton from "./ui/MagneticButton";
 import { profile, personaCopy } from "@/lib/data";
 import { usePersona } from "./PersonaContext";
@@ -145,14 +146,19 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Right: 3D scene — decorative, hidden on small screens for a clean mobile hero */}
+        {/* Right: full floating 3D scene on desktop, a compact card on mobile */}
         <motion.div
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="relative hidden lg:block"
+          className="relative"
         >
-          <HeroScene />
+          <div className="hidden lg:block">
+            <HeroScene />
+          </div>
+          <div className="lg:hidden">
+            <HeroMobileVisual />
+          </div>
         </motion.div>
       </div>
 
