@@ -141,17 +141,19 @@ export function DashboardPanel() {
         </svg>
       </div>
 
-      {/* mini tech tiles — icons matching the stack */}
+      {/* mini tech tiles — icon + label + live bar */}
       <div className="mt-3 grid grid-cols-3 gap-2">
         {[
           {
             c: "#6366f1",
-            // code brackets
+            label: "React",
+            w: "82%",
             icon: <path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 6l-3 12" />,
           },
           {
             c: "#8b5cf6",
-            // database
+            label: "Mongo",
+            w: "64%",
             icon: (
               <>
                 <ellipse cx="12" cy="6" rx="7" ry="3" />
@@ -162,28 +164,41 @@ export function DashboardPanel() {
           },
           {
             c: "#5b7cfa",
-            // cloud
+            label: "Cloud",
+            w: "91%",
             icon: <path d="M7 18a4 4 0 0 1-.5-7.97 5.5 5.5 0 0 1 10.6-1.02A4 4 0 0 1 17 18H7Z" />,
           },
         ].map((tile, i) => (
           <div
             key={i}
-            className="flex flex-col gap-2 rounded-lg border border-white/8 bg-white/[0.03] p-2"
+            className="flex flex-col gap-2 rounded-lg border border-white/8 bg-white/[0.03] p-2.5"
           >
-            <span style={{ color: tile.c }}>
+            <div className="flex items-center gap-1.5" style={{ color: tile.c }}>
               <svg
-                className="h-4 w-4"
+                className="h-3.5 w-3.5"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="1.6"
+                strokeWidth="1.7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
                 {tile.icon}
               </svg>
-            </span>
-            <span className="block h-1.5 w-2/3 rounded-full bg-white/12" />
+              <span className="text-[9px] font-semibold uppercase tracking-wide text-white/60">
+                {tile.label}
+              </span>
+            </div>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.08]">
+              <motion.div
+                className="h-full rounded-full"
+                style={{ background: `linear-gradient(90deg, ${tile.c}, ${tile.c}99)` }}
+                initial={{ width: 0 }}
+                whileInView={{ width: tile.w }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.6 + i * 0.15, ease: EASE }}
+              />
+            </div>
           </div>
         ))}
       </div>
