@@ -140,7 +140,10 @@ export default function Hero() {
             transition={{ duration: 1, delay: 1.3 }}
             className="mt-10 flex flex-col items-start gap-2 text-xs uppercase tracking-[0.2em] text-white/35 sm:flex-row sm:items-center sm:gap-6"
           >
-            <span>{personaCopy.heroTag[persona]}</span>
+            <span className="flex items-center gap-3">
+              <span className="h-px w-6 bg-white/25 sm:hidden" />
+              {personaCopy.heroTag[persona]}
+            </span>
             <span className="hidden h-px w-6 bg-white/20 sm:block" />
             <span>{profile.location.split(",")[0]}, India</span>
           </motion.div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import type { Persona } from "@/lib/data";
 
 /**
@@ -81,6 +81,12 @@ function MacDots() {
 /* ---------- individual panels ---------- */
 
 export function DashboardPanel() {
+  // Unique gradient IDs per instance — the panel renders twice (desktop +
+  // mobile), and duplicate SVG IDs made the mobile chart reference the hidden
+  // desktop gradient and render blank.
+  const uid = useId().replace(/:/g, "");
+  const fillId = `chartFill-${uid}`;
+  const strokeId = `chartStroke-${uid}`;
   return (
     <div className={`${glass} w-[290px] p-4 sm:w-[320px]`}>
       <div className="flex items-center justify-between">
@@ -110,25 +116,25 @@ export function DashboardPanel() {
       <div className="relative mt-3 h-[76px] w-full">
         <svg viewBox="0 0 280 80" className="h-full w-full" preserveAspectRatio="none">
           <defs>
-            <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" stopColor="#7c8cff" stopOpacity="0.35" />
               <stop offset="1" stopColor="#7c8cff" stopOpacity="0" />
             </linearGradient>
-            <linearGradient id="stroke" x1="0" y1="0" x2="1" y2="0">
+            <linearGradient id={strokeId} x1="0" y1="0" x2="1" y2="0">
               <stop offset="0" stopColor="#a5b4fc" />
               <stop offset="1" stopColor="#c4b5fd" />
             </linearGradient>
           </defs>
           <path
-            d="M0 62 C 30 58, 45 40, 70 44 S 110 66, 140 50 S 185 20, 210 30 S 255 44, 280 26"
-            fill="none"
-            stroke="url(#stroke)"
-            strokeWidth="2.5"
-            strokeLinecap="round"
+            d="M0 62 C 30 58, 45 40, 70 44 S 110 66, 140 50 S 185 20, 210 30 S 255 44, 280 26 L 280 80 L 0 80 Z"
+            fill={`url(#${fillId})`}
           />
           <path
-            d="M0 62 C 30 58, 45 40, 70 44 S 110 66, 140 50 S 185 20, 210 30 S 255 44, 280 26 L 280 80 L 0 80 Z"
-            fill="url(#fill)"
+            d="M0 62 C 30 58, 45 40, 70 44 S 110 66, 140 50 S 185 20, 210 30 S 255 44, 280 26"
+            fill="none"
+            stroke={`url(#${strokeId})`}
+            strokeWidth="2.5"
+            strokeLinecap="round"
           />
           <motion.circle
             cx="280"
